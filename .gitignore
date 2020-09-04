@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
 dist/
-export-pwd
+export-pwd.sh
