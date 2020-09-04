@@ -10,8 +10,8 @@
       "es2016",
       "es2015"
     ],
-    "declaration": true,
-    "sourceMap": true,
+    "declaration": false,
+    "sourceMap": false,
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
