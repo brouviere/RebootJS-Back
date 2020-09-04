@@ -1,9 +1,9 @@
 {
   "PORT": 3000,
   "express_debug": true,
-  "mongo_host": "localhost",
+  "mongo_host": "myflintmessenger.rl4bc.mongodb.net",
   "mongo_user": "benjamin",
   "mongo_pass": "pwd",
-  "mongo_database": "flint-messenger"
-
+  "mongo_database": "flint-messenger",
+  "mongo_debug": true
 }

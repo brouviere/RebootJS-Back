@@ -11,7 +11,8 @@ export interface IConfig {
   mongo_host: string,
   mongo_user: string,
   mongo_pass: string,
-  mongo_database: string
+  mongo_database: string,
+  mongo_debug: boolean
 }
 
 export function configuration(): IConfig {
