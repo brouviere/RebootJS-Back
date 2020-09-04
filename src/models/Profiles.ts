@@ -4,6 +4,7 @@ export interface IProfile extends Document {
   email: String;
   firstname: String;
   lastname: String;
+  myCustomFunction: () => String;
 }
 
 const profileSchema = new Schema({
@@ -22,4 +23,8 @@ const profileSchema = new Schema({
   }
 });
 
-export const Profile = model<IProfile>('profile', profileSchema);
+profileSchema.methods.getFullName = function () {
+  return `${this.firstname} ${this.lastname}`;
+}
+
+export const Profile = model<IProfile, Model<IProfile>>('profile', profileSchema);
