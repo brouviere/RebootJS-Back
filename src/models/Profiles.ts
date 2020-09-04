@@ -1,24 +1,23 @@
 import { Document, Schema, model, Model} from 'mongoose';
-import { string } from '@hapi/joi';
 
 export interface IProfile extends Document {
-  email: string;
-  firstname: string;
-  lastname: string;
+  email: String;
+  firstname: String;
+  lastname: String;
 }
 
 const profileSchema = new Schema({
   email: {
-    type: string,
+    type: String,
     required: true,
     unique: true
   },
   firstname: {
-    type: string,
+    type: String,
     required: true,
   },
   lastname: {
-    type: string,
+    type: String,
     required: true,
   }
 });
