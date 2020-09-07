@@ -10,8 +10,8 @@ jobs:
     install: npm i
     script: npm run build
 deploy:
+  provider: heroku
   api_key:
     secure: LUzvsvTdC+bArYAFzq7nXiRC/JwLVkkQGTH5mGTNlCQA0TQVHaGDSqAYeNJV7MD4nKXZvyQznzT8wdgS6zIdFkmvZHKZmga8ybOFlVq08oG8PdbO4o/XswzP86QIZTwUGCUIkD2R6XPr9tQcMc4bMmcNQaRjYGi9kyUKaf4znQeyzeXXBXU+yLeVqxqjTAVS9hdNbVOqZk/G8blm+ERxkKqyg/2ewE9l7hChfYvFHNWnFCSQhtBtQhHRuyjLJjFiFn2NyYAdhh2keODHZI2CaFQeoNWBddRSSDf2G32FCT8v576aY/7Iv5dol9Qbkh9NjdBxUSXYrI/0EciyZ5YKGVjObRuZ91w+8tsgH4aSX9fAlT7cl/uYSc+w86xtvbBmfHyI+/DT3FWb6zk74yukreycDp2IllNLE2UsVaZHeiIFu3sj42KUQ/Byo/JR0Uq9EKCZxjzNMwQyvu8nF5lX7qRt011RFx/jRyBaFRAVT4yCD3KCAH0EczF2DP0XdrGI46RpeNGXpO3jA51hXgws8/UfP9azzGDWnFx6YWtAV+QPeMb/+bJlWPagLCfTQPQ8ftRbbag3ezXkkDt+jkENWdajAimMO1tykmVM4OUVuRBabVPxwd4lqwceafqvR7/XDN8llMKfoipH0d2FFbwohM8YznWgFeDv59vU3IgjKKY=
   on:
     all_branches: true
-    
