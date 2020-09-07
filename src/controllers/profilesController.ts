@@ -46,9 +46,12 @@ const findByIdAndUpdate = async (id: string, data: IProfile ) => {
   }
 }
 
-const create = async (data: IProfile) => {
+const create = async (data: any) => {
   try {
-    const newProfile = await new Profile(data).save();
+    const newProfile = new Profile({ email: data.email, firstname: data.firstname, lastname: data.lastname });
+    newProfile.setPassword(data.password);
+    newProfile.save();
+
     return newProfile;
   } catch (error) {
     return 'Error occured'

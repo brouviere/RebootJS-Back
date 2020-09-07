@@ -4,7 +4,10 @@ import helmet from "helmet";
 import { configuration, IConfig } from "./config";
 import { connect } from './database';
 import bodyParser from 'body-parser';
+
 import profileRoutes from './routes/profileRoutes';
+import loginRoute from './routes/loginRoute';
+import { authenticationInitialize } from './controllers/authenticationController';
 
 export function createExpressApp(config: IConfig): express.Express {
   
@@ -17,6 +20,7 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
+  app.use(authenticationInitialize());
 
   app.use(((err, _req, res, _next) => {
     console.error(err.stack);
@@ -26,6 +30,8 @@ export function createExpressApp(config: IConfig): express.Express {
   app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
   
   app.use('/profiles', profileRoutes);
+
+  app.use('/login', loginRoute)
 
   return app;
 }

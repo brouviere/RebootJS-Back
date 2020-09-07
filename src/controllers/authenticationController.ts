@@ -1,8 +1,7 @@
 import passport from "passport";
 import { Strategy } from "passport-local";
 import Profile from "../models/Profiles";
-
-
+import { Handler } from "express";
 
 passport.use(
   new Strategy((username: string, password: string, done) => {
@@ -10,8 +9,7 @@ passport.use(
       Profile.findOne({email: username}, null, (err, profile) => {
         if(err) { return done(err); }
         if(profile) {
-          const isPasswordCorrect = profile.verifyPassword(password);
-          if(isPasswordCorrect) { return done(null, profile) }
+          return done(null, profile.verifyPassword(password) ? profile : null) 
         }
         return done(new Error('Profile not found'));
       })
@@ -20,3 +18,5 @@ passport.use(
     }
   })
 )
+
+export const authenticationInitialize = (): Handler => passport.initialize(); 
