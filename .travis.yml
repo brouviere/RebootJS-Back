@@ -1,0 +1,12 @@
+language: node_js
+node_js: 12
+
+stages:
+  - build
+
+jobs:
+  include:
+    - name: Build
+    stage: build
+    install: npm i
+    script: npm run build
