@@ -6,7 +6,7 @@ stages:
 
 jobs:
   include:
-    - name: Build
+  - name: Build
     stage: build
     install: npm i
     script: npm run build
