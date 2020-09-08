@@ -12,7 +12,9 @@ export interface IConfig {
   mongo_user: string,
   mongo_pass: string,
   mongo_database: string,
-  mongo_debug: boolean
+  mongo_debug: boolean,
+  session_cookie_name: string,
+  session_secret: string
 }
 
 export function configuration(): IConfig {

@@ -7,11 +7,17 @@ import bodyParser from 'body-parser';
 
 import profileRoutes from './routes/profileRoutes';
 import loginRoute from './routes/loginRoute';
-import { authenticationInitialize } from './controllers/authenticationController';
+import { authenticationInitialize, authenticationSession } from './controllers/authenticationController';
+
+import session from 'express-session';
+import connectMongo from 'connect-mongo';
+import mongoose from 'mongoose';
+
+const MongoStore = connectMongo(session);
 
 export function createExpressApp(config: IConfig): express.Express {
   
-  const { express_debug } = config;
+  const { express_debug, session_secret, session_cookie_name } = config;
 
   const app = express();
 
@@ -20,18 +26,29 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
+  
+  // SESSION
   app.use(authenticationInitialize());
+  app.use(authenticationSession());
+  app.use(session({
+    name: session_cookie_name,
+    secret: session_secret,
+    store: new MongoStore({mongooseConnection: mongoose.connection}),
+    resave: false,
+    saveUninitialized: false
+  }));
+
 
   app.use(((err, _req, res, _next) => {
     console.error(err.stack);
     res.status?.(500).send(!express_debug ? 'Oups' : err);
   }) as ErrorRequestHandler);
 
-  app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
-  
   app.use('/profiles', profileRoutes);
 
   app.use('/login', loginRoute)
+
+  app.get('/', (req: Request, res: Response) => { res.send('This is the boilerplate for Flint Messenger app') });
 
   return app;
 }

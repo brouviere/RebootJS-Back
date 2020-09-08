@@ -1,6 +1,7 @@
 import { Router, Request, Response } from 'express';
 import Profile from '../models/Profiles';
 import profilesController from '../controllers/profilesController';
+import authenticationRequired from '../middlewares/authenticationRequired';
 
 const router = Router();
 
@@ -13,7 +14,7 @@ router.get("/", async (req: Request, res: Response) => {
   res.send(profiles);
 });
 
-router.get('/:id', async (req: Request, res: Response) => { 
+router.get('/:id', authenticationRequired, async (req: Request, res: Response) => { 
   const profileId = req.params['id'];
   const profile = await profilesController.findById(profileId);
 
