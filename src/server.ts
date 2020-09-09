@@ -4,6 +4,7 @@ import helmet from "helmet";
 import { configuration, IConfig } from "./config";
 import { connect } from './database';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 import profileRoutes from './routes/profileRoutes';
 import loginRoute from './routes/loginRoute';
@@ -26,6 +27,7 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
+  app.use(cors());
   
   // SESSION
   app.use(authenticationInitialize());

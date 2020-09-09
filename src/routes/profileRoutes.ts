@@ -5,15 +5,6 @@ import authenticationRequired from '../middlewares/authenticationRequired';
 
 const router = Router();
 
-router.get("/", async (req: Request, res: Response) => {
-
-  const profiles = await profilesController.find();
-  
-  if(profiles == null) { console.log('No profiles.') }
-
-  res.send(profiles);
-});
-
 router.get('/:id', authenticationRequired, async (req: Request, res: Response) => { 
   const profileId = req.params['id'];
   const profile = await profilesController.findById(profileId);
@@ -22,6 +13,18 @@ router.get('/:id', authenticationRequired, async (req: Request, res: Response) =
 
   res.send(profile);
 });
+
+router.get('/', (req: Request, res: Response) => {
+  const skip: number = req.query.skip ? +req.query.skip : 0;
+  const limit: number = req.query.limit ? +req.query.limit : 3;
+  Profile.find({}, '_id email firstname lastname').skip(skip).limit(limit)
+    .then(profiles => {
+      return res.status(200).send(profiles);
+    })
+    .catch(error => {
+      return res.status(500).send();
+    })
+})
 
 router.post('/', async (req: Request, res: Response) => {
   const newProfile = await profilesController.create(req.body);
