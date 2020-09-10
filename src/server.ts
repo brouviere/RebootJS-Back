@@ -30,8 +30,6 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(cors());
   
   // SESSION
-  app.use(authenticationInitialize());
-  app.use(authenticationSession());
   app.use(session({
     name: session_cookie_name,
     secret: session_secret,
@@ -39,7 +37,8 @@ export function createExpressApp(config: IConfig): express.Express {
     resave: false,
     saveUninitialized: false
   }));
-
+  app.use(authenticationInitialize());
+  app.use(authenticationSession());
 
   app.use(((err, _req, res, _next) => {
     console.error(err.stack);

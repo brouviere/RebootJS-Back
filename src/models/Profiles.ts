@@ -8,7 +8,10 @@ export interface IProfile extends Document {
   getFullName: () => string;
   setPassword: (password: string) => void;
   verifyPassword: (password: string) => boolean;
+  getSafeProfile: () => ISafeProfile;
 }
+
+export type ISafeProfile = Pick<IProfile, '_id' | 'email' | 'lastname' | 'firstname'>
 
 const profileSchema = new Schema({
   email: {
@@ -29,6 +32,12 @@ const profileSchema = new Schema({
     required: true,
   }
 });
+
+
+profileSchema.methods.getSafeProfile = function (): ISafeProfile {
+  const { _id, email, lastname, firstname } = this;
+  return { _id, email, lastname, firstname };
+};
 
 profileSchema.methods.getFullName = function () {
   return `${this.firstname} ${this.lastname}`;

@@ -14,7 +14,7 @@ router.get('/:id', authenticationRequired, async (req: Request, res: Response) =
   res.send(profile);
 });
 
-router.get('/', (req: Request, res: Response) => {
+router.get('/', authenticationRequired, (req: Request, res: Response) => {
   const skip: number = req.query.skip ? +req.query.skip : 0;
   const limit: number = req.query.limit ? +req.query.limit : 3;
   Profile.find({}, '_id email firstname lastname').skip(skip).limit(limit)
