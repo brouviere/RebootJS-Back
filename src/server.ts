@@ -27,7 +27,7 @@ export function createExpressApp(config: IConfig): express.Express {
   app.use(express.json());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
-  app.use(cors());
+  app.use(cors({credentials: true, origin: true}));
   
   // SESSION
   app.use(session({
