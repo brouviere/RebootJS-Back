@@ -7,15 +7,14 @@ passport.use(
   new Strategy((username: string, password: string, done) => {
     try {
       Profile.findOne({email: username}, null, (err, profile) => {
-        if(err) { 
-          return done(err);
-        }
-        if( profile && profile.verifyPassword(password) ) {
-          return done(null, profile); 
+        if(err) { return done(err); }
+        if(profile) {
+          const hasCorrectPassword = profile.verifyPassword(password);
+          if(hasCorrectPassword) { return done(null, profile) };
         }
         return done(new ProfileNotFoundError("Profile not found"));
       })
-    } catch (error) {
+    } catch(error) {
       return done(error);
     }
   })
