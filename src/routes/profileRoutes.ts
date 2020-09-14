@@ -1,5 +1,5 @@
 import { Router, Request, Response } from 'express';
-import Profile from '../models/Profiles';
+import Profile, { IProfile } from '../models/Profiles';
 import profilesController from '../controllers/profilesController';
 import authenticationRequired from '../middlewares/authenticationRequired';
 
@@ -14,6 +14,11 @@ router.get('/:id', authenticationRequired, async (req: Request, res: Response) =
   res.send(profile);
 });
 
+router.get("/me", authenticationRequired, (request: Request, response: Response) => {
+  if(!request.user) { return response.status(401).send() }
+  return response.json((request.user as IProfile).getSafeProfile());
+});
+
 router.get('/', (req: Request, res: Response) => {
   const skip: number = req.query.skip ? +req.query.skip : 0;
   const limit: number = req.query.limit ? +req.query.limit : 3;
@@ -24,7 +29,7 @@ router.get('/', (req: Request, res: Response) => {
     .catch(error => {
       return res.status(500).send();
     })
-})
+});
 
 router.post('/', async (req: Request, res: Response) => {
   const newProfile = await profilesController.create(req.body);
@@ -38,6 +43,22 @@ router.patch('/:id', async (req: Request, res: Response) => {
 
   const updatedProfile = await profilesController.findByIdAndUpdate(profileId, req.body)
   res.send('User updated');
+})
+
+router.patch('/', authenticationRequired, async (req: Request, res: Response) => {
+  if(!req.user) { return res.status(401).send() }
+  const { email, firstname, lastname, password } = req.body;
+  
+
+  profilesController.updateProfile(req.user as IProfile, email, firstname, lastname, password)
+    .then(profile => {
+      if(!profile) return res.status(404).send("Profile not found");
+      return res.status(200).send(profile.getSafeProfile());
+    })
+    .catch(error => {
+      console.error(error);
+      return res.status(500).send();
+    });
 })
 
 router.delete('/:id', (req: Request, res: Response) => {

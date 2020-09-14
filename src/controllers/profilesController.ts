@@ -46,6 +46,11 @@ const findByIdAndUpdate = async (id: string, data: IProfile ) => {
   }
 }
 
+const updateProfile = (profile: IProfile, email: string, firstname: string, lastname: string, password?: string): Promise<IProfile | null> => {
+  if(password) profile.setPassword(password);
+  return Profile.findByIdAndUpdate(profile._id, {email, firstname, lastname}).then(profile => profile);
+}
+
 const create = async (data: any) => {
   try {
     const newProfile = new Profile({ email: data.email, firstname: data.firstname, lastname: data.lastname });
@@ -63,5 +68,6 @@ export = {
   findById,
   findByIdAndDelete,
   findByIdAndUpdate,
-  create
+  create,
+  updateProfile
 }
