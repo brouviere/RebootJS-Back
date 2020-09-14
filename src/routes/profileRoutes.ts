@@ -61,11 +61,14 @@ router.patch('/', authenticationRequired, async (req: Request, res: Response) =>
     });
 })
 
-router.delete('/:id', (req: Request, res: Response) => {
-  const profileId = req.params['id'];
-
-  const profileDeleted = profilesController.findByIdAndDelete(profileId);
-  res.status(200).send('User deleted !');
+router.delete('/', authenticationRequired, (req: Request, res: Response) => {
+  if(!req.user) { return res.status(401).send() }
+  (req.user as IProfile).deleteOne()
+    .then(_profile => res.status(200).send('User deleted'))
+    .catch(error => {
+      console.error(error);
+      return res.status(500).send();
+    });
 })
 
 export default router;
