@@ -7,6 +7,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 
 import profileRoutes from './routes/profileRoutes';
+import messagesRoutes from './routes/messagesRoutes';
 import loginRoute from './routes/loginRoute';
 import { authenticationInitialize, authenticationSession } from './controllers/authenticationController';
 
@@ -46,6 +47,8 @@ export function createExpressApp(config: IConfig): express.Express {
   }) as ErrorRequestHandler);
 
   app.use('/profiles', profileRoutes);
+
+  app.use('/messages', messagesRoutes);
 
   app.use('/login', loginRoute)
 
