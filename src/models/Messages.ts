@@ -9,11 +9,13 @@ export interface IMessage extends Document {
 }
 
 const messageSchema = new Schema({
-  targets: {
-    type: Schema.Types.ObjectId,
-    ref: 'profile',
-    required: true
-  },
+  targets: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'profile',
+      required: true
+    }
+  ],
   conversationId: {
     type: String,
     required: true

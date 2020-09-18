@@ -5,13 +5,15 @@ export interface IProfile extends Document {
   email: string;
   firstname: string;
   lastname: string;
+  conversationSeen: { [conversationId : string] : string };
   getFullName: () => string;
   setPassword: (password: string) => void;
   verifyPassword: (password: string) => boolean;
   getSafeProfile: () => ISafeProfile;
+  updateConversationSeen: (conversationId: string, seenDate: string) => void;
 }
 
-export type ISafeProfile = Pick<IProfile, '_id' | 'email' | 'lastname' | 'firstname'>
+export type ISafeProfile = Pick<IProfile, '_id' | 'email' | 'lastname' | 'firstname' | 'conversationSeen'>
 
 const profileSchema = new Schema({
   email: {
@@ -30,13 +32,19 @@ const profileSchema = new Schema({
   password: {
     type: String,
     required: true,
-  }
+  },
+  conversationSeen: [
+    {
+      type: Object,
+      required: false
+    }
+  ]
 });
 
 
 profileSchema.methods.getSafeProfile = function (): ISafeProfile {
-  const { _id, email, lastname, firstname } = this;
-  return { _id, email, lastname, firstname };
+  const { _id, email, lastname, firstname, conversationSeen } = this;
+  return { _id, email, lastname, firstname, conversationSeen };
 };
 
 profileSchema.methods.getFullName = function () {
@@ -49,6 +57,10 @@ profileSchema.methods.setPassword = function (password: string) {
 
 profileSchema.methods.verifyPassword = function (password: string) {
   return this.password === SHA256(password).toString();
+}
+
+profileSchema.methods.updateConversationSeen = function (conversationId: string, seenDate: string) {
+  this.conversationSeen = { ...this.conversationSeen, [conversationId]: seenDate};
 }
 
 const Profile = model<IProfile, Model<IProfile>>('profile', profileSchema);

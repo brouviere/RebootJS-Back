@@ -71,4 +71,15 @@ router.delete('/', authenticationRequired, (req: Request, res: Response) => {
     });
 })
 
+router.post('/conversation-seen/:conversationId', authenticationRequired, async (req: Request, res: Response) => {
+  const user = req.user as IProfile;
+  const conversationId = req.params['conversationId'];
+
+  user.updateConversationSeen(conversationId, new Date().toISOString());
+
+  const savedUser = await user.save();
+
+  return res.json(savedUser);
+})
+
 export default router;
