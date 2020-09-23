@@ -5,6 +5,11 @@ import authenticationRequired from '../middlewares/authenticationRequired';
 
 const router = Router();
 
+router.get("/me", authenticationRequired, (request: Request, response: Response) => {
+  if(!request.user) { return response.status(401).send() }
+  return response.json((request.user as IProfile).getSafeProfile());
+});
+
 router.get('/:id', authenticationRequired, async (req: Request, res: Response) => { 
   const profileId = req.params['id'];
   const profile = await profilesController.findById(profileId);
@@ -12,11 +17,6 @@ router.get('/:id', authenticationRequired, async (req: Request, res: Response) =
   if(profile == null) { console.log('No profile found') }
 
   res.send(profile);
-});
-
-router.get("/me", authenticationRequired, (request: Request, response: Response) => {
-  if(!request.user) { return response.status(401).send() }
-  return response.json((request.user as IProfile).getSafeProfile());
 });
 
 router.get('/', (req: Request, res: Response) => {

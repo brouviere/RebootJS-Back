@@ -1,26 +1,37 @@
 import { Router, Request, Response } from 'express';
-import messagesControllers from '../controllers/messagesControllers';
+import messagesController from '../controllers/messagesController';
 import authenticationRequired from '../middlewares/authenticationRequired';
-import { IProfile } from '../models/Profiles';
+import Profile, { IProfile } from '../models/Profiles';
+import { io } from "../socket";
 
 const router = Router();
 
 router.get('/', authenticationRequired, async (req: Request, res: Response) => {
   if(!req.user) { return res.status(401).send('You must be authenticated')};
-  return res.json(await messagesControllers.getAllMessages(req.user as IProfile));
+  return res.json(await messagesController.getAllMessages(req.user as IProfile));
 });
 
 router.get('/:conversationId', authenticationRequired, async (req: Request, res: Response) => {
   if(!req.user) { return res.status(401).send('You must be authenticated')};
-  return res.json(await messagesControllers.getAllMessages(req.user as IProfile, req.params['conversationId']));
+  return res.json(await messagesController.getAllMessages(req.user as IProfile, req.params['conversationId']));
 });
 
 router.post('/', authenticationRequired, async (req: Request, res: Response) => {
   if(!req.user) { return res.status(401).send('You must be authenticated')};
   const { conversationId, targets, content, emitter } = req.body;
-  const newMessage = await messagesControllers.createMessage(req.user as IProfile, conversationId, targets, content);
+  const newMessage = await messagesController.createMessage(req.user as IProfile, conversationId, targets, content);
 
-  return res.json(newMessage);
+  res.json(newMessage);
+
+  return await Promise.all(
+    newMessage.targets.map(async (target) => {
+      const profile = await Profile.findById(target)
+      const socketId = profile?.socket;
+      if(socketId){
+        io.to(socketId).emit('chat-message', newMessage.toJSON())
+      }
+    })
+  )
 });
 
 export default router;

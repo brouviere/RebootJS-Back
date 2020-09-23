@@ -6,6 +6,7 @@ export interface IProfile extends Document {
   firstname: string;
   lastname: string;
   conversationSeen: { [conversationId : string] : string };
+  socket?: string; 
   getFullName: () => string;
   setPassword: (password: string) => void;
   verifyPassword: (password: string) => boolean;
@@ -38,7 +39,10 @@ const profileSchema = new Schema({
       type: Object,
       required: false
     }
-  ]
+  ],
+  socket: {
+    type: String
+  }
 });
 
 

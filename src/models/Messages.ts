@@ -29,8 +29,10 @@ const messageSchema = new Schema({
     type: String,
     required: true
   },
-  created: {
-
+  createdAt: {
+    type: String,
+    required: true,
+    default: new Date().toISOString()
   }
 });
 
