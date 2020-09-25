@@ -5,6 +5,7 @@ import { Store } from 'express-session';
 import passport from 'passport';
 import Profile from './models/Profiles';
 import passportSocketIo from 'passport.socketio';
+import cookieParser from 'cookie-parser';
 
 
 const actives = new Set<Socket>();
@@ -19,7 +20,7 @@ export function initializeSockets(config: IConfig, httpServer: HTTPServer, sessi
       secret: session_secret,
       store: sessionStore,
       passport: passport,
-      // cookieParser: cookieParser as any,
+      cookieParser: cookieParser as any,
     }),
   );
   io.on('connection', (socket) => connect(socket));
@@ -27,6 +28,7 @@ export function initializeSockets(config: IConfig, httpServer: HTTPServer, sessi
 }
 
 async function connect(socket: Socket): Promise<void> {
+  console.log('An user just connected');
   const _id: string = (socket.request.user as any)._id;
   actives.add(socket);
   const user = await Profile.findById(_id);

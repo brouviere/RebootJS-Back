@@ -33,6 +33,6 @@ passport.deserializeUser(
   }
 );
 
-export const authenticationInitialize = (): Handler => passport.initialize(); 
+export const authenticationInitialize = (): Handler => passport.initialize();
 export const authenticationSession = (): Handler => passport.session();
 export class ProfileNotFoundError extends Error {};
