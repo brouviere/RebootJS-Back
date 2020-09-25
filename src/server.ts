@@ -41,7 +41,7 @@ export function createExpressApp(config: IConfig): express.Express {
     saveUninitialized: false,
     cookie: {
       sameSite: "none",
-      secure: true
+      secure: 'auto'
     }
   }));
   app.use(authenticationInitialize());
